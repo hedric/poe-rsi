@@ -1,4 +1,4 @@
-use rdev::{listen, Event, simulate, Button, EventType, SimulateError};
+use rdev::{grab, simulate, Button, Event, EventType, SimulateError};
 use std::{thread, time};
 
 static EVENT_DELAY_MS: u64 = 5;
@@ -14,25 +14,24 @@ fn send(event_type: &EventType) {
     thread::sleep(delay);
 }
 
-fn callback(event: Event) {
-    //println!("My callback {:?}", event);
-    if let EventType::Wheel {
-        delta_x: 0,
-        delta_y: _,
-    } = event.event_type
-
-    {
-        send(&EventType::ButtonPress(Button::Left));
-        thread::sleep(time::Duration::from_millis(1));
-        //println!("Detected wheel, so lets click {:?}", event);
-        send(&EventType::ButtonRelease(Button::Left));
-    }
-}
-
 fn main() {
+    let callback = |event: Event| -> Option<Event> {
+        if let EventType::Wheel {
+            delta_x: 0,
+            delta_y: _,
+        } = event.event_type
+        {
+            send(&EventType::ButtonPress(Button::Left));
+            //println!("Detected wheel, so lets click {:?}", event);
+            send(&EventType::ButtonRelease(Button::Left));
+            None
+        } else {
+            Some(event)
+        }
+    };
 
     // This will block
-    if let Err(error) = listen(callback) {
-        println!{"Error: {:?}", error};
+    if let Err(error) = grab(callback) {
+        println! {"Error: {:?}", error};
     }
 }
