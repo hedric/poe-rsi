@@ -1,7 +1,7 @@
 use rdev::{grab, simulate, Button, Event, EventType, SimulateError};
 use std::{thread, time};
 
-static EVENT_DELAY_MS: u64 = 5;
+static EVENT_DELAY_MS: u64 = 2;
 
 fn send(event_type: &EventType) {
     let delay = time::Duration::from_millis(EVENT_DELAY_MS);
