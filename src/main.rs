@@ -2,7 +2,7 @@ use rdev::{grab, simulate, Button, Event, EventType, Key, SimulateError};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::{thread, time};
 
-static EVENT_DELAY_MS: u64 = 2;
+const EVENT_DELAY_MS: u64 = 2;
 static CTRL_PRESSED: AtomicBool = AtomicBool::new(false);
 
 fn send(event_type: &EventType) {
